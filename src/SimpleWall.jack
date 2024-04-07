@@ -1,0 +1,63 @@
+class SimpleWall {
+
+   field int x, y; // screen location of the top-left corner of this square
+   field int size; // length of this square, in pixels
+
+   /** Constructs and draws a new square with a given location and size. */
+   constructor SimpleWall new(int ax, int ay, int asize) {
+      let x = ax;
+      let y = ay;
+      let size = asize;
+      do draw();
+      return this;
+   }
+
+   /** Disposes this square. */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   /** Draws this square in its current (x,y) location */
+   method void draw() {
+      // Draws the square using the color black
+      do Screen.setColor(true);
+      do Screen.drawRectangle(x, y, x + size, y + size);
+      return;
+   }
+
+   /** Erases this square. */
+   method void erase() {
+      // Draws the square using the color white (background color)
+      do Screen.setColor(false);
+      do Screen.drawRectangle(x, y, x + size, y + size);
+      return;
+   }
+
+   /** Moves the square left by 2 pixels (if possible). */
+   method boolean tryMove() {
+      if (x > 1) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
+         let x = x - 2;
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + 1, y + size);
+         return true;
+      }
+      else {
+        return false;
+      }
+   }
+
+   method int getXPos() {
+    return x;
+   }
+
+   method int getYPos() {
+    return y;
+   }
+
+   method int getSize() {
+    return size;
+   }
+}
