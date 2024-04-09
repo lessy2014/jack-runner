@@ -20,39 +20,78 @@ class Square {
       return;
    }
 
-   /** Draws this square in its current (x,y) location */
-   method void draw() {
-      // Draws the square using the color black
-      do Screen.setColor(true);
-      do Screen.drawRectangle(x, y, x + size, y + size);
-      return;
-   }
-
    /** Erases this square. */
    method void erase() {
-      // Draws the square using the color white (background color)
-      do Screen.setColor(false);
-      do Screen.drawRectangle(x, y, x + size, y + size);
-      return;
-   }
-
-    /** Increments the square size by 2 pixels (if possible). */
-   method void incSize() {
-      if (((y + size) < 254) & ((x + size) < 510)) {
-         do erase();
-         let size = size + 2;
-         do draw();
-      }
-      return;
-   }
-
-   /** Decrements the square size by 2 pixels (if possible). */
-   method void decSize() {
-      if (size > 2) {
-         do erase();
-         let size = size - 2;
-         do draw();
-      }
+      var int memAddress;
+      let memAddress = 16384 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, 0);
+      do Memory.poke(memAddress + 32, 0);
+      do Memory.poke(memAddress + 64, 0);
+      do Memory.poke(memAddress + 96, 0);
+      do Memory.poke(memAddress + 128, 0);
+      do Memory.poke(memAddress + 160, 0);
+      do Memory.poke(memAddress + 192, 0);
+      do Memory.poke(memAddress + 224, 0);
+      do Memory.poke(memAddress + 256, 0);
+      do Memory.poke(memAddress + 288, 0);
+      do Memory.poke(memAddress + 320, 0);
+      do Memory.poke(memAddress + 352, 0);
+      do Memory.poke(memAddress + 384, 0);
+      do Memory.poke(memAddress + 416, 0);
+      do Memory.poke(memAddress + 448, 0);
+      do Memory.poke(memAddress + 480, 0);
+      let memAddress = 16384 + 496 + 17 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, 0);
+      do Memory.poke(memAddress + 32, 0);
+      do Memory.poke(memAddress + 64, 0);
+      do Memory.poke(memAddress + 96, 0);
+      do Memory.poke(memAddress + 128, 0);
+      do Memory.poke(memAddress + 160, 0);
+      do Memory.poke(memAddress + 192, 0);
+      do Memory.poke(memAddress + 224, 0);
+      do Memory.poke(memAddress + 256, 0);
+      do Memory.poke(memAddress + 288, 0);
+      do Memory.poke(memAddress + 320, 0);
+      do Memory.poke(memAddress + 352, 0);
+      do Memory.poke(memAddress + 384, 0);
+      do Memory.poke(memAddress + 416, 0);
+      do Memory.poke(memAddress + 448, 0);
+      do Memory.poke(memAddress + 480, 0);
+      let memAddress = 16384 + 1 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, 0);
+      do Memory.poke(memAddress + 32, 0);
+      do Memory.poke(memAddress + 64, 0);
+      do Memory.poke(memAddress + 96, 0);
+      do Memory.poke(memAddress + 128, 0);
+      do Memory.poke(memAddress + 160, 0);
+      do Memory.poke(memAddress + 192, 0);
+      do Memory.poke(memAddress + 224, 0);
+      do Memory.poke(memAddress + 256, 0);
+      do Memory.poke(memAddress + 288, 0);
+      do Memory.poke(memAddress + 320, 0);
+      do Memory.poke(memAddress + 352, 0);
+      do Memory.poke(memAddress + 384, 0);
+      do Memory.poke(memAddress + 416, 0);
+      do Memory.poke(memAddress + 448, 0);
+      do Memory.poke(memAddress + 480, 0);
+      let memAddress = 16384 + 496 + 16 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, 0);
+      do Memory.poke(memAddress + 32, 0);
+      do Memory.poke(memAddress + 64, 0);
+      do Memory.poke(memAddress + 96, 0);
+      do Memory.poke(memAddress + 128, 0);
+      do Memory.poke(memAddress + 160, 0);
+      do Memory.poke(memAddress + 192, 0);
+      do Memory.poke(memAddress + 224, 0);
+      do Memory.poke(memAddress + 256, 0);
+      do Memory.poke(memAddress + 288, 0);
+      do Memory.poke(memAddress + 320, 0);
+      do Memory.poke(memAddress + 352, 0);
+      do Memory.poke(memAddress + 384, 0);
+      do Memory.poke(memAddress + 416, 0);
+      do Memory.poke(memAddress + 448, 0);
+      do Memory.poke(memAddress + 480, 0);
+      // do collider.debugErase();
       return;
    }
 
@@ -60,12 +99,10 @@ class Square {
    method void moveUp() {
       if (y > 1) {
          // Erases the bottom two rows of this square in its current location
-         do Screen.setColor(false);
-         do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+         do erase();
          let y = y - 2;
          do collider.setY(y);
-         do Screen.setColor(true);
-         do Screen.drawRectangle(x, y, x + size, y + 1);
+         do draw();
       }
       return;
    }
@@ -73,12 +110,10 @@ class Square {
    /** Moves the square down by 2 pixels (if possible). */
    method void moveDown() {
       if ((y + size) < 254) {
-         do Screen.setColor(false);
-         do Screen.drawRectangle(x, y, x + size, y + 1);
+         do erase();
          let y = y + 2;
          do collider.setY(y);
-         do Screen.setColor(true);
-         do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+         do draw();
       }
       return;
    }
@@ -86,12 +121,10 @@ class Square {
    /** Moves the square left by 2 pixels (if possible). */
    method void moveLeft() {
       if (x > 1) {
-         do Screen.setColor(false);
-         do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
+         do erase();
          let x = x - 2;
          do collider.setX(x);
-         do Screen.setColor(true);
-         do Screen.drawRectangle(x, y, x + 1, y + size);
+         do draw();
       }
       return;
    }
@@ -99,13 +132,85 @@ class Square {
    /** Moves the square right by 2 pixels (if possible). */
    method void moveRight() {
       if ((x + size) < 510) {
-         do Screen.setColor(false);
-         do Screen.drawRectangle(x, y, x + 1, y + size);
+         do erase();
          let x = x + 2;
          do collider.setX(x);
-         do Screen.setColor(true);
-         do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
+         do draw();
       }
+      return;
+   }
+
+   method void draw() {
+      var int memAddress;
+      let memAddress = 16384 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, -256);
+      do Memory.poke(memAddress + 32, 128);
+      do Memory.poke(memAddress + 64, -960);
+      do Memory.poke(memAddress + 96, 544);
+      do Memory.poke(memAddress + 128, 31008);
+      do Memory.poke(memAddress + 160, 1168);
+      do Memory.poke(memAddress + 192, 592);
+      do Memory.poke(memAddress + 224, -760);
+      do Memory.poke(memAddress + 256, -2040);
+      do Memory.poke(memAddress + 288, 32564);
+      do Memory.poke(memAddress + 320, -24102);
+      do Memory.poke(memAddress + 352, 7693);
+      do Memory.poke(memAddress + 384, 69);
+      do Memory.poke(memAddress + 416, 16821);
+      do Memory.poke(memAddress + 448, -19959);
+      do Memory.poke(memAddress + 480, -25586);
+      let memAddress = 16384 + 496 + 17 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, 21956);
+      do Memory.poke(memAddress + 32, 21820);
+      do Memory.poke(memAddress + 64, 24356);
+      do Memory.poke(memAddress + 96, 24575);
+      do Memory.poke(memAddress + 128, 24575);
+      do Memory.poke(memAddress + 160, 19428);
+      do Memory.poke(memAddress + 192, 18724);
+      do Memory.poke(memAddress + 224, -31452);
+      do Memory.poke(memAddress + 256, -31835);
+      do Memory.poke(memAddress + 288, -32642);
+      do Memory.poke(memAddress + 320, -28672);
+      do Memory.poke(memAddress + 352, 19395);
+      do Memory.poke(memAddress + 384, 17468);
+      do Memory.poke(memAddress + 416, 17345);
+      do Memory.poke(memAddress + 448, 8222);
+      do Memory.poke(memAddress + 480, 8160);
+      let memAddress = 16384 + 1 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, 3);
+      do Memory.poke(memAddress + 32, 1020);
+      do Memory.poke(memAddress + 64, 1024);
+      do Memory.poke(memAddress + 96, 3064);
+      do Memory.poke(memAddress + 128, 5121);
+      do Memory.poke(memAddress + 160, 9155);
+      do Memory.poke(memAddress + 192, 9250);
+      do Memory.poke(memAddress + 224, 18464);
+      do Memory.poke(memAddress + 256, 17345);
+      do Memory.poke(memAddress + 288, -18222);
+      do Memory.poke(memAddress + 320, -31775);
+      do Memory.poke(memAddress + 352, -17376);
+      do Memory.poke(memAddress + 384, -32224);
+      do Memory.poke(memAddress + 416, -30719);
+      do Memory.poke(memAddress + 448, -30656);
+      do Memory.poke(memAddress + 480, 22222);
+      let memAddress = 16384 + 496 + 16 + (x / 16) + (y * 32);
+      do Memory.poke(memAddress + 0, 27460);
+      do Memory.poke(memAddress + 32, -12728);
+      do Memory.poke(memAddress + 64, 23176);
+      do Memory.poke(memAddress + 96, -5360);
+      do Memory.poke(memAddress + 128, -13808);
+      do Memory.poke(memAddress + 160, 19488);
+      do Memory.poke(memAddress + 192, 22944);
+      do Memory.poke(memAddress + 224, 25152);
+      do Memory.poke(memAddress + 256, -13184);
+      do Memory.poke(memAddress + 288, -19712);
+      do Memory.poke(memAddress + 320, 19456);
+      do Memory.poke(memAddress + 352, -20480);
+      do Memory.poke(memAddress + 384, 16384);
+      do Memory.poke(memAddress + 416, -32642);
+      do Memory.poke(memAddress + 448, 0);
+      do Memory.poke(memAddress + 480, 0);
+      // do collider.debugDraw();
       return;
    }
 

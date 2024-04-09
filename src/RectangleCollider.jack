@@ -54,4 +54,16 @@ class RectangleCollider {
       do Memory.deAlloc(this);
       return;
    }
+
+   method void debugDraw() {
+      do Screen.setColor(true);
+      do Screen.drawRectangle(x, y, x + sizeX, y + sizeY);
+      return;
+   }
+
+   method void debugErase() {
+      do Screen.setColor(false);
+      do Screen.drawRectangle(x, y, x + sizeX, y + sizeY);
+      return;
+   }
 }

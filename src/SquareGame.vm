@@ -212,6 +212,24 @@ label IF_TRUE3
 push constant 2
 pop this 1
 label IF_FALSE3
+push local 0
+push constant 130
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 3
+pop this 1
+label IF_FALSE4
+push local 0
+push constant 132
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push constant 4
+pop this 1
+label IF_FALSE5
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
