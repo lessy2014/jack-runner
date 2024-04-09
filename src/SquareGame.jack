@@ -113,11 +113,12 @@ class SquareGame {
          if (~(isCollided))
          {
             do moveSquare();
+            
             // let direction = 0;
             if (wallType = 0) {
                let isCollided = checkCollision(square, upperWall) | checkCollision(square, lowerWall);
             }
-            if (wallType = 1 & inJumpForIterations < 10) {
+            if ((wallType = 1) & (inJumpForIterations < 10)) {
                let isCollided = checkCollision(square, jumpWall);
             }
          }
@@ -131,6 +132,7 @@ class SquareGame {
      return;
    }
 
+   // Наследования не завезли, но можно арбузить вот так, если есть подходящие методы и поля
    method boolean checkCollision(Square player, SimpleWall someWall) {
     var RectangleCollider playerCollider, wallCollider;
     let playerCollider = player.getCollider();

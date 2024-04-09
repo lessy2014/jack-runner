@@ -161,7 +161,7 @@ return
 function SquareGame.createNewWall 0
 push argument 0
 pop pointer 0
-push constant 1
+push constant 0
 push constant 1
 call LCGRandom.randRange 2
 pop this 3
@@ -291,9 +291,9 @@ push this 3
 push constant 1
 eq
 push this 4
-and
 push constant 10
 lt
+and
 if-goto IF_TRUE4
 goto IF_FALSE4
 label IF_TRUE4

@@ -23,22 +23,22 @@ class JumpWall {
       let step = 480 + 32;
       while (i < 16) {
          let memAddress = 16384 + (step * i) + (x / 16) + (y * 32);
-         do Memory.poke(memAddress + 0, -1);
-         do Memory.poke(memAddress + 32, -32191);
-         do Memory.poke(memAddress + 64, -15997);
-         do Memory.poke(memAddress + 96, -24571);
-         do Memory.poke(memAddress + 128, -28663);
-         do Memory.poke(memAddress + 160, -30703);
-         do Memory.poke(memAddress + 192, -31711);
-         do Memory.poke(memAddress + 224, -32191);
-         do Memory.poke(memAddress + 256, -15997);
-         do Memory.poke(memAddress + 288, -24571);
-         do Memory.poke(memAddress + 320, -28663);
-         do Memory.poke(memAddress + 352, -30703);
-         do Memory.poke(memAddress + 384, -31711);
-         do Memory.poke(memAddress + 416, -32191);
-         do Memory.poke(memAddress + 448, -15997);
-         do Memory.poke(memAddress + 480, -24571);
+         do Memory.poke(memAddress + 0, -24571);
+         do Memory.poke(memAddress + 32, -15997);
+         do Memory.poke(memAddress + 64, -32191);
+         do Memory.poke(memAddress + 96, -31711);
+         do Memory.poke(memAddress + 128, -30703);
+         do Memory.poke(memAddress + 160, -28663);
+         do Memory.poke(memAddress + 192, -24571);
+         do Memory.poke(memAddress + 224, -15997);
+         do Memory.poke(memAddress + 256, -32191);
+         do Memory.poke(memAddress + 288, -31711);
+         do Memory.poke(memAddress + 320, -30703);
+         do Memory.poke(memAddress + 352, -28663);
+         do Memory.poke(memAddress + 384, -24571);
+         do Memory.poke(memAddress + 416, -15997);
+         do Memory.poke(memAddress + 448, -32191);
+         do Memory.poke(memAddress + 480, -1);
          let i = i + 1;
       }
       return;
