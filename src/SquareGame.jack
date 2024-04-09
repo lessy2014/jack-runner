@@ -70,14 +70,7 @@ class SquareGame {
       while (~exit) {
          // waits for a key to be pressed
          while (key = 0) {
-            let key = Keyboard.keyPressed();
-            do moveWall();
-            if (~(isCollided))
-            {
-               do moveSquare();
-               let isCollided = checkCollision(square, upperWall);
-               let isCollided = isCollided | checkCollision(square, lowerWall);
-            }
+            do gameStep();
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
@@ -87,16 +80,21 @@ class SquareGame {
 
          // waits for the key to be released
          while (~(key = 0)) {
-            let key = Keyboard.keyPressed();
-            do moveWall();
-            if (~(isCollided))
-            {
-               do moveSquare();
-               let isCollided = checkCollision(square, upperWall) | checkCollision(square, lowerWall);
-            }
+            do gameStep();
          }
-     } // while
+     } 
      return;
+   }
+
+   method void gameStep()
+   {
+      let key = Keyboard.keyPressed();
+      do moveWall();
+      if (~(isCollided))
+      {
+         do moveSquare();
+         let isCollided = checkCollision(square, upperWall) | checkCollision(square, lowerWall);
+      }
    }
 
    method boolean checkCollision(Square player, SimpleWall someWall) {
