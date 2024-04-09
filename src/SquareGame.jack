@@ -53,9 +53,9 @@ class SquareGame {
    {
       var SimpleWall wall1, wall2;
       let obstacleLine = ObstacleLine.new(250);
-      let randPos = LCGRandom.randRange(30, 226);
-      let wall1 = SimpleWall.new(250, 0, 30, randPos);
-      let wall2 = SimpleWall.new(250, randPos + 50, 30, (256 - randPos) - 50);
+      let randPos = LCGRandom.randRange(1, 204);
+      let wall1 = SimpleWall.new(250, 0, 10, randPos);
+      let wall2 = SimpleWall.new(250, randPos + 50, 10, (205 - randPos));
       do obstacleLine.addObstacle(wall1);
       do obstacleLine.addObstacle(wall2);
       return;
@@ -72,12 +72,12 @@ class SquareGame {
          // waits for a key to be pressed
          while (key = 0) {
             let key = Keyboard.keyPressed();
+            do moveObstacleLine();
             if (~(isCollided))
             {
                do moveSquare();
                let isCollided = checkCollision(square, obstacleLine);
             }
-            do moveObstacleLine();
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
