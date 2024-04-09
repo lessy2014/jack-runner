@@ -1,0 +1,89 @@
+class JumpWall {
+
+   field RectangleCollider collider;
+   field int x, y, sizeX, sizeY;
+
+   constructor JumpWall new(int ax, int ay, int aSizeX, int aSizeY) {
+      let x = ax;
+      let y = ay;
+      let sizeX = aSizeX;
+      let sizeY = aSizeY;
+      let collider = RectangleCollider.new(x, y, sizeX, sizeY);
+      do draw();
+      return this;
+   }
+
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   method void draw() {
+      var int memAddress, step, i;
+      let step = 480 + 32;
+      while (i < 16) {
+         let memAddress = 16384 + (step * i) + (x / 16) + (y * 32);
+         do Memory.poke(memAddress + 0, -1);
+         do Memory.poke(memAddress + 32, -32191);
+         do Memory.poke(memAddress + 64, -15997);
+         do Memory.poke(memAddress + 96, -24571);
+         do Memory.poke(memAddress + 128, -28663);
+         do Memory.poke(memAddress + 160, -30703);
+         do Memory.poke(memAddress + 192, -31711);
+         do Memory.poke(memAddress + 224, -32191);
+         do Memory.poke(memAddress + 256, -15997);
+         do Memory.poke(memAddress + 288, -24571);
+         do Memory.poke(memAddress + 320, -28663);
+         do Memory.poke(memAddress + 352, -30703);
+         do Memory.poke(memAddress + 384, -31711);
+         do Memory.poke(memAddress + 416, -32191);
+         do Memory.poke(memAddress + 448, -15997);
+         do Memory.poke(memAddress + 480, -24571);
+         let i = i + 1;
+      }
+      return;
+      }
+ 
+   method void erase() {
+      var int memAddress, step, i;
+      let step = 480 + 32;
+      while (i < 16) {
+         let memAddress = 16384 + (step * i) + (x / 16) + (y * 32);
+         do Memory.poke(memAddress + 0, 0);
+         do Memory.poke(memAddress + 32, 0);
+         do Memory.poke(memAddress + 64, 0);
+         do Memory.poke(memAddress + 96, 0);
+         do Memory.poke(memAddress + 128, 0);
+         do Memory.poke(memAddress + 160, 0);
+         do Memory.poke(memAddress + 192, 0);
+         do Memory.poke(memAddress + 224, 0);
+         do Memory.poke(memAddress + 256, 0);
+         do Memory.poke(memAddress + 288, 0);
+         do Memory.poke(memAddress + 320, 0);
+         do Memory.poke(memAddress + 352, 0);
+         do Memory.poke(memAddress + 384, 0);
+         do Memory.poke(memAddress + 416, 0);
+         do Memory.poke(memAddress + 448, 0);
+         do Memory.poke(memAddress + 480, 0);
+         let i = i + 1;
+      }
+      return;
+   }
+
+   method boolean tryMove() {
+      if (x > 1) {
+         do erase();
+         let x = x - 2;
+         do collider.setX(x);
+         do draw();
+         return true;
+      }
+      else {
+        return false;
+      }
+   }
+
+   method RectangleCollider getCollider() {
+    return collider;
+   }
+}

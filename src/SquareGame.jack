@@ -2,8 +2,12 @@ class SquareGame {
    field Square square; // the square of this game
    field int direction; // the square's current direction: 
                         // 0=none, 1=up, 2=down, 3=left, 4=right
+   field int iterationsToNewWall;
+   field int wallType;
+   field int inJumpForIterations;
     field SimpleWall upperWall;
     field SimpleWall lowerWall;
+    field JumpWall jumpWall;
     field int randPos;
 
    /** Constructs a new square game. */
@@ -12,6 +16,8 @@ class SquareGame {
       let square = Square.new(0, 0, 30);
       do LCGRandom.setSeed(10);
       let direction = 0;
+      let iterationsToNewWall = 255;
+      let inJumpForIterations = 0;
       return this;
    }
 
@@ -28,19 +34,24 @@ class SquareGame {
       if (direction = 2) { do square.moveDown(); }
       if (direction = 3) { do square.moveLeft(); }
       if (direction = 4) { do square.moveRight(); }
+      if (inJumpForIterations > 10) { do square.jump(); }
       return;
    }
 
     method void moveWall() {
       var boolean wallMoved;
-      if (upperWall = null) {
-         do createLineOfWalls();
-      }
-      let wallMoved = upperWall.tryMove() & lowerWall.tryMove();
-      if (~(wallMoved))
+      if (wallType = 0)
       {
-        do disposeOfWalls();
-        do createLineOfWalls();
+         let wallMoved = upperWall.tryMove() & lowerWall.tryMove();
+         if (~(wallMoved)) {
+         do disposeOfWallLine();
+         }
+      }
+      if (wallType = 1) {
+         let wallMoved = jumpWall.tryMove();
+         if (~(wallMoved)) {
+            do disposeOfJumpWall();
+         }
       }
       do Sys.wait(25);  // по сути скорость игры. Чем меньше, тем игра быстрее
       return;
@@ -54,12 +65,31 @@ class SquareGame {
       return;
    }
 
-   method void disposeOfWalls()
+   method void createNewWall()
+   {
+      let wallType = LCGRandom.randRange(0, 1);
+      if (wallType = 0) {
+         do createLineOfWalls();
+      }
+      if (wallType = 1) {
+         let jumpWall = JumpWall.new(500, 0, 16, 255);
+      }
+      return;
+   }
+
+   method void disposeOfWallLine()
    {
       do upperWall.erase();
       do upperWall.dispose();
       do lowerWall.erase();
       do lowerWall.dispose();
+      return;
+   }
+
+   method void disposeOfJumpWall()
+   {
+      do jumpWall.erase();
+      do jumpWall.dispose();
       return;
    }
 
@@ -72,18 +102,31 @@ class SquareGame {
       
       while (~exit) {
          let key = Keyboard.keyPressed();
+         if (iterationsToNewWall = 255) 
+         {
+            do createNewWall();
+            let iterationsToNewWall = 0;
+         }
+         let iterationsToNewWall = iterationsToNewWall + 1;
+         if (inJumpForIterations > 0) { let inJumpForIterations = inJumpForIterations - 1; }
          do moveWall();
          if (~(isCollided))
          {
             do moveSquare();
             // let direction = 0;
-            let isCollided = checkCollision(square, upperWall) | checkCollision(square, lowerWall);
+            if (wallType = 0) {
+               let isCollided = checkCollision(square, upperWall) | checkCollision(square, lowerWall);
+            }
+            if (wallType = 1 & inJumpForIterations < 10) {
+               let isCollided = checkCollision(square, jumpWall);
+            }
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
          if (key = 133) { let direction = 2; }   // down arrow
          if (key = 130) { let direction = 3; }   // left arrow
          if (key = 132) { let direction = 4; }   // right arrow
+         if ((key = 32) & (inJumpForIterations = 0)) { let inJumpForIterations = 50; } // space to jump
      } 
      return;
    }
