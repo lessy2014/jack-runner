@@ -1,5 +1,5 @@
 function SquareGame.new 0
-push constant 4
+push constant 5
 call Memory.alloc 1
 pop pointer 0
 push constant 0
@@ -10,16 +10,6 @@ pop this 0
 push constant 10
 call LCGRandom.setSeed 1
 pop temp 0
-push constant 0
-push constant 224
-call LCGRandom.randRange 2
-pop this 3
-push constant 250
-push constant 50
-push constant 10
-push constant 30
-call SimpleWall.new 4
-pop this 2
 push constant 0
 pop this 1
 push pointer 0
@@ -87,30 +77,68 @@ function SquareGame.moveWall 1
 push argument 0
 pop pointer 0
 push this 2
-call SimpleWall.tryMove 1
-pop local 0
-push local 0
-not
+push constant 0
+eq
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
+push constant 250
 push constant 0
-push constant 224
-call LCGRandom.randRange 2
+push constant 10
+push constant 50
+call SimpleWall.new 4
+pop this 2
+push constant 250
+push constant 100
+push constant 10
+push constant 155
+call SimpleWall.new 4
 pop this 3
+label IF_FALSE0
+push this 2
+call SimpleWall.tryMove 1
+pop local 0
+push this 3
+call SimpleWall.tryMove 1
+pop temp 0
+push local 0
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 1
+push constant 204
+call LCGRandom.randRange 2
+pop this 4
 push this 2
 call SimpleWall.erase 1
 pop temp 0
 push this 2
 call SimpleWall.dispose 1
 pop temp 0
-push constant 250
 push this 3
+call SimpleWall.erase 1
+pop temp 0
+push this 3
+call SimpleWall.dispose 1
+pop temp 0
+push constant 250
+push constant 0
 push constant 10
-push constant 30
+push this 4
 call SimpleWall.new 4
 pop this 2
-label IF_FALSE0
+push constant 250
+push this 4
+push constant 50
+add
+push constant 10
+push constant 205
+push this 4
+sub
+call SimpleWall.new 4
+pop this 3
+label IF_FALSE1
 push constant 50
 call Sys.wait 1
 pop temp 0
@@ -136,6 +164,9 @@ not
 if-goto WHILE_END1
 call Keyboard.keyPressed 0
 pop local 0
+push pointer 0
+call SquareGame.moveWall 1
+pop temp 0
 push local 2
 not
 if-goto IF_TRUE0
@@ -149,10 +180,14 @@ push this 0
 push this 2
 call SquareGame.checkCollision 3
 pop local 2
-label IF_FALSE0
+push local 2
 push pointer 0
-call SquareGame.moveWall 1
-pop temp 0
+push this 0
+push this 3
+call SquareGame.checkCollision 3
+or
+pop local 2
+label IF_FALSE0
 goto WHILE_EXP1
 label WHILE_END1
 push local 0
@@ -225,6 +260,13 @@ push pointer 0
 push this 0
 push this 2
 call SquareGame.checkCollision 3
+pop local 2
+push local 2
+push pointer 0
+push this 0
+push this 3
+call SquareGame.checkCollision 3
+or
 pop local 2
 label IF_FALSE6
 goto WHILE_EXP2

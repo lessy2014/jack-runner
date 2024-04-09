@@ -2,7 +2,8 @@ class SquareGame {
    field Square square; // the square of this game
    field int direction; // the square's current direction: 
                         // 0=none, 1=up, 2=down, 3=left, 4=right
-    field SimpleWall wall;
+    field SimpleWall upperWall;
+    field SimpleWall lowerWall;
     field int randPos;
 
    /** Constructs a new square game. */
@@ -10,8 +11,6 @@ class SquareGame {
       // The initial square is located in (0,0), has size 30, and is not moving.
       let square = Square.new(0, 0, 30);
       do LCGRandom.setSeed(10);
-      let randPos = LCGRandom.randRange(0, 224);
-      let wall = SimpleWall.new(250, 50, 10, 30);
       let direction = 0;
       return this;
    }
@@ -35,13 +34,22 @@ class SquareGame {
 
     method void moveWall() {
       var boolean wallMoved;
-      let wallMoved = wall.tryMove();
+      if (upperWall = null)
+      {
+         let upperWall = SimpleWall.new(250, 0, 10, 50);
+         let lowerWall = SimpleWall.new(250, 100, 10, 155);
+      }
+      let wallMoved = upperWall.tryMove();
+      do lowerWall.tryMove();
       if (~(wallMoved))
       {
-        let randPos = LCGRandom.randRange(0, 224);
-        do wall.erase();
-        do wall.dispose();
-        let wall = SimpleWall.new(250, randPos, 10, 30);
+        let randPos = LCGRandom.randRange(1, 204);
+        do upperWall.erase();
+        do upperWall.dispose();
+        do lowerWall.erase();
+        do lowerWall.dispose();
+        let upperWall = SimpleWall.new(250, 0, 10, randPos);
+        let lowerWall = SimpleWall.new(250, randPos + 50, 10, (205 - randPos));
       }
       do Sys.wait(50);  // delays the next movement
       return;
@@ -58,12 +66,13 @@ class SquareGame {
          // waits for a key to be pressed
          while (key = 0) {
             let key = Keyboard.keyPressed();
+            do moveWall();
             if (~(isCollided))
             {
                do moveSquare();
-               let isCollided = checkCollision(square, wall);
+               let isCollided = checkCollision(square, upperWall);
+               let isCollided = isCollided | checkCollision(square, lowerWall);
             }
-            do moveWall();
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
@@ -78,7 +87,8 @@ class SquareGame {
             if (~(isCollided))
             {
                do moveSquare();
-               let isCollided = checkCollision(square, wall);
+               let isCollided = checkCollision(square, upperWall);
+               let isCollided = isCollided | checkCollision(square, lowerWall);
             }
          }
      } // while
