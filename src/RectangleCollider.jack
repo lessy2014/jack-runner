@@ -1,0 +1,57 @@
+class RectangleCollider {
+
+   field int x, y; // screen location of the top-left corner of this square
+   field int sizeX, sizeY; // length of this collider, in pixels
+
+   constructor RectangleCollider new(int ax, int ay, int aSizeX, int aSizeY) {
+      let x = ax;
+      let y = ay;
+      let sizeX = aSizeX;
+      let sizeY = aSizeY;
+      return this;
+   }
+
+   method int getX() {
+      return x;
+   }
+
+   method void setX(int newX) {
+      let x = newX; 
+      return;
+   }
+
+   method int getY() {
+      return y;
+   }
+
+   method void setY(int newY) {
+      let y = newY; 
+      return;
+   }
+
+   method int getSizeX() {
+      return sizeX;
+   }
+
+   method int getSizeY() {
+      return sizeY;
+   }
+
+   // inverted https://www.baeldung.com/java-check-if-two-rectangles-overlap
+   method boolean isCollided(RectangleCollider collider) {
+      if (y > (collider.getY() + collider.getSizeY()) | (y + sizeY) < collider.getY())
+      {
+        return false;
+      } 
+      if (x > (collider.getX() + collider.getSizeX()) | (x + sizeX) < collider.getX())
+      {
+        return false;
+      } 
+      return true;
+   }
+   
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+}

@@ -1,0 +1,102 @@
+function RectangleCollider.new 0
+push constant 4
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 2
+pop this 2
+push argument 3
+pop this 3
+push pointer 0
+return
+function RectangleCollider.getX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function RectangleCollider.setX 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 0
+push constant 0
+return
+function RectangleCollider.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function RectangleCollider.setY 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 1
+push constant 0
+return
+function RectangleCollider.getSizeX 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function RectangleCollider.getSizeY 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function RectangleCollider.isCollided 0
+push argument 0
+pop pointer 0
+push this 1
+push argument 1
+call RectangleCollider.getY 1
+push argument 1
+call RectangleCollider.getSizeY 1
+add
+gt
+push this 1
+push this 3
+add
+or
+push argument 1
+call RectangleCollider.getY 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 0
+push argument 1
+call RectangleCollider.getX 1
+push argument 1
+call RectangleCollider.getSizeX 1
+add
+gt
+push this 0
+push this 2
+add
+or
+push argument 1
+call RectangleCollider.getX 1
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function RectangleCollider.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
