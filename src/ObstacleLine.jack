@@ -1,0 +1,83 @@
+class ObstacleLine {
+
+   field Array simpleWalls; 
+   field Array colliders;
+   field int obstaclesLength;
+   field int x;
+
+   constructor ObstacleLine new(int ax) {
+      let x = ax;
+      let simpleWalls = Array.new(4); 
+      let colliders = Array.new(4);
+      let obstaclesLength = 0;
+      return this;
+   }
+
+   method void addObstacle(SimpleWall wall) {
+      if (obstaclesLength = 4) {
+         return;
+      }
+      let simpleWalls[obstaclesLength] = wall;
+      let colliders[obstaclesLength] = wall.getCollider();
+      let obstaclesLength = obstaclesLength + 1; 
+      return;
+   }
+
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   method void draw() {
+      var int i;
+      var SimpleWall wall;
+      let i = obstaclesLength;
+      while (i > 0)
+      {
+         let i = i - 1;
+         let wall = simpleWalls[i];
+         do wall.draw();
+      }
+      return;
+   }
+ 
+   method void erase() {
+      var int i;
+      var SimpleWall wall;
+      let i = obstaclesLength;
+      while (i > 0)
+      {
+         let i = i - 1;
+         let wall = simpleWalls[i];
+         do wall.erase();
+      }
+      return;
+   }
+
+   method boolean tryMove() {
+      var int i;
+      var SimpleWall wall;
+      if (x > 1) {
+         let i = obstaclesLength;
+         while (i > 0)
+         {
+            let i = i - 1;
+            let wall = simpleWalls[i];
+            do wall.tryMove();
+         }
+         let x = x - 2;
+         return true;
+      }
+      else {
+         return false;
+      }
+   }
+
+   method Array getColliders() {
+    return colliders;
+   }
+
+   method int getCollidersCount() {
+    return obstaclesLength;
+   }
+}

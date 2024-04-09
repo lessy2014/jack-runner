@@ -2,7 +2,7 @@ class SquareGame {
    field Square square; // the square of this game
    field int direction; // the square's current direction: 
                         // 0=none, 1=up, 2=down, 3=left, 4=right
-    field SimpleWall wall;
+    field ObstacleLine obstacleLine;
     field int randPos;
 
    /** Constructs a new square game. */
@@ -10,8 +10,6 @@ class SquareGame {
       // The initial square is located in (0,0), has size 30, and is not moving.
       let square = Square.new(0, 0, 30);
       do LCGRandom.setSeed(10);
-      let randPos = LCGRandom.randRange(0, 224);
-      let wall = SimpleWall.new(250, 50, 10, 30);
       let direction = 0;
       return this;
    }
@@ -33,17 +31,33 @@ class SquareGame {
       return;
    }
 
-    method void moveWall() {
-      var boolean wallMoved;
-      let wallMoved = wall.tryMove();
-      if (~(wallMoved))
+   method void moveObstacleLine() {
+      var boolean lineMoved;
+      if (obstacleLine = null)
       {
-        let randPos = LCGRandom.randRange(0, 224);
-        do wall.erase();
-        do wall.dispose();
-        let wall = SimpleWall.new(250, randPos, 10, 30);
+         do createObstacleLine();
+      }
+      let lineMoved = obstacleLine.tryMove();
+      if (~(lineMoved))
+      {
+        
+        do obstacleLine.erase();
+        do obstacleLine.dispose();
+        do createObstacleLine();
       }
       do Sys.wait(50);  // delays the next movement
+      return;
+   }
+
+   method void createObstacleLine()
+   {
+      var SimpleWall wall1, wall2;
+      let obstacleLine = ObstacleLine.new(250);
+      let randPos = LCGRandom.randRange(30, 226);
+      let wall1 = SimpleWall.new(250, 0, 30, randPos);
+      let wall2 = SimpleWall.new(250, randPos + 50, 30, (256 - randPos) - 50);
+      do obstacleLine.addObstacle(wall1);
+      do obstacleLine.addObstacle(wall2);
       return;
    }
 
@@ -61,9 +75,9 @@ class SquareGame {
             if (~(isCollided))
             {
                do moveSquare();
-               let isCollided = checkCollision(square, wall);
+               let isCollided = checkCollision(square, obstacleLine);
             }
-            do moveWall();
+            do moveObstacleLine();
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
@@ -74,22 +88,39 @@ class SquareGame {
          // waits for the key to be released
          while (~(key = 0)) {
             let key = Keyboard.keyPressed();
-            do moveWall();
+            do moveObstacleLine();
             if (~(isCollided))
             {
                do moveSquare();
-               let isCollided = checkCollision(square, wall);
+               let isCollided = checkCollision(square, obstacleLine);
             }
          }
      } // while
      return;
    }
 
-   method boolean checkCollision(Square player, SimpleWall someWall) {
+   method boolean checkCollisionWithWall(Square player, SimpleWall someWall) {
     var RectangleCollider playerCollider, wallCollider;
     let playerCollider = player.getCollider();
     let wallCollider = someWall.getCollider();
     return playerCollider.isCollided(wallCollider);
+   }
+
+   method boolean checkCollision(Square player, ObstacleLine line) {
+    var Array colliders;
+    var int collidersLength;
+    var boolean isCollided;
+    let collidersLength = line.getCollidersCount();
+    while (collidersLength > 0)
+    {
+      let collidersLength = collidersLength - 1;
+      let isCollided = checkCollisionWithWall(player, colliders[collidersLength]);
+      if (isCollided)
+         {
+            return true;
+         }
+    }
+    return false;
    }
 }
 

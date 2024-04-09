@@ -11,16 +11,6 @@ push constant 10
 call LCGRandom.setSeed 1
 pop temp 0
 push constant 0
-push constant 224
-call LCGRandom.randRange 2
-pop this 3
-push constant 250
-push constant 50
-push constant 10
-push constant 30
-call SimpleWall.new 4
-pop this 2
-push constant 0
 pop this 1
 push pointer 0
 return
@@ -83,36 +73,77 @@ call Sys.wait 1
 pop temp 0
 push constant 0
 return
-function SquareGame.moveWall 1
+function SquareGame.moveObstacleLine 1
 push argument 0
 pop pointer 0
 push this 2
-call SimpleWall.tryMove 1
-pop local 0
-push local 0
-not
+push constant 0
+eq
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push constant 0
-push constant 224
-call LCGRandom.randRange 2
-pop this 3
-push this 2
-call SimpleWall.erase 1
+push pointer 0
+call SquareGame.createObstacleLine 1
 pop temp 0
-push this 2
-call SimpleWall.dispose 1
-pop temp 0
-push constant 250
-push this 3
-push constant 10
-push constant 30
-call SimpleWall.new 4
-pop this 2
 label IF_FALSE0
+push this 2
+call ObstacleLine.tryMove 1
+pop local 0
+push local 0
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 2
+call ObstacleLine.erase 1
+pop temp 0
+push this 2
+call ObstacleLine.dispose 1
+pop temp 0
+push pointer 0
+call SquareGame.createObstacleLine 1
+pop temp 0
+label IF_FALSE1
 push constant 50
 call Sys.wait 1
+pop temp 0
+push constant 0
+return
+function SquareGame.createObstacleLine 2
+push argument 0
+pop pointer 0
+push constant 250
+call ObstacleLine.new 1
+pop this 2
+push constant 30
+push constant 226
+call LCGRandom.randRange 2
+pop this 3
+push constant 250
+push constant 0
+push constant 30
+push this 3
+call SimpleWall.new 4
+pop local 0
+push constant 250
+push this 3
+push constant 50
+add
+push constant 30
+push constant 256
+push this 3
+sub
+push constant 50
+sub
+call SimpleWall.new 4
+pop local 1
+push this 2
+push local 0
+call ObstacleLine.addObstacle 2
+pop temp 0
+push this 2
+push local 1
+call ObstacleLine.addObstacle 2
 pop temp 0
 push constant 0
 return
@@ -151,7 +182,7 @@ call SquareGame.checkCollision 3
 pop local 2
 label IF_FALSE0
 push pointer 0
-call SquareGame.moveWall 1
+call SquareGame.moveObstacleLine 1
 pop temp 0
 goto WHILE_EXP1
 label WHILE_END1
@@ -211,7 +242,7 @@ if-goto WHILE_END2
 call Keyboard.keyPressed 0
 pop local 0
 push pointer 0
-call SquareGame.moveWall 1
+call SquareGame.moveObstacleLine 1
 pop temp 0
 push local 2
 not
@@ -233,7 +264,7 @@ goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function SquareGame.checkCollision 2
+function SquareGame.checkCollisionWithWall 2
 push argument 0
 pop pointer 0
 push argument 1
@@ -245,4 +276,41 @@ pop local 1
 push local 0
 push local 1
 call RectangleCollider.isCollided 2
+return
+function SquareGame.checkCollision 3
+push argument 0
+pop pointer 0
+push argument 2
+call ObstacleLine.getCollidersCount 1
+pop local 1
+label WHILE_EXP0
+push local 1
+push constant 0
+gt
+not
+if-goto WHILE_END0
+push local 1
+push constant 1
+sub
+pop local 1
+push pointer 0
+push argument 1
+push local 1
+push local 0
+add
+pop pointer 1
+push that 0
+call SquareGame.checkCollisionWithWall 3
+pop local 2
+push local 2
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+label IF_FALSE0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
 return
