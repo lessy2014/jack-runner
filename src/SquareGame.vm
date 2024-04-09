@@ -68,9 +68,6 @@ push this 0
 call Square.moveRight 1
 pop temp 0
 label IF_FALSE3
-push constant 5
-call Sys.wait 1
-pop temp 0
 push constant 0
 return
 function SquareGame.moveWall 1
@@ -88,26 +85,17 @@ pop temp 0
 label IF_FALSE0
 push this 2
 call SimpleWall.tryMove 1
-pop local 0
 push this 3
 call SimpleWall.tryMove 1
-pop temp 0
+and
+pop local 0
 push local 0
 not
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push this 2
-call SimpleWall.erase 1
-pop temp 0
-push this 2
-call SimpleWall.dispose 1
-pop temp 0
-push this 3
-call SimpleWall.erase 1
-pop temp 0
-push this 3
-call SimpleWall.dispose 1
+push pointer 0
+call SquareGame.disposeOfWalls 1
 pop temp 0
 push pointer 0
 call SquareGame.createLineOfWalls 1
@@ -122,25 +110,42 @@ function SquareGame.createLineOfWalls 0
 push argument 0
 pop pointer 0
 push constant 1
-push constant 204
+push constant 184
 call LCGRandom.randRange 2
 pop this 4
-push constant 250
+push constant 500
 push constant 0
 push constant 10
 push this 4
 call SimpleWall.new 4
 pop this 2
-push constant 250
+push constant 500
 push this 4
-push constant 50
+push constant 70
 add
 push constant 10
-push constant 205
+push constant 185
 push this 4
 sub
 call SimpleWall.new 4
 pop this 3
+push constant 0
+return
+function SquareGame.disposeOfWalls 0
+push argument 0
+pop pointer 0
+push this 2
+call SimpleWall.erase 1
+pop temp 0
+push this 2
+call SimpleWall.dispose 1
+pop temp 0
+push this 3
+call SimpleWall.erase 1
+pop temp 0
+push this 3
+call SimpleWall.dispose 1
+pop temp 0
 push constant 0
 return
 function SquareGame.run 3
@@ -155,12 +160,6 @@ push local 1
 not
 not
 if-goto WHILE_END0
-label WHILE_EXP1
-push local 0
-push constant 0
-eq
-not
-if-goto WHILE_END1
 call Keyboard.keyPressed 0
 pop local 0
 push pointer 0
@@ -178,8 +177,6 @@ push pointer 0
 push this 0
 push this 2
 call SquareGame.checkCollision 3
-pop local 2
-push local 2
 push pointer 0
 push this 0
 push this 3
@@ -187,8 +184,6 @@ call SquareGame.checkCollision 3
 or
 pop local 2
 label IF_FALSE0
-goto WHILE_EXP1
-label WHILE_END1
 push local 0
 push constant 81
 eq
@@ -217,57 +212,6 @@ label IF_TRUE3
 push constant 2
 pop this 1
 label IF_FALSE3
-push local 0
-push constant 130
-eq
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
-push constant 3
-pop this 1
-label IF_FALSE4
-push local 0
-push constant 132
-eq
-if-goto IF_TRUE5
-goto IF_FALSE5
-label IF_TRUE5
-push constant 4
-pop this 1
-label IF_FALSE5
-label WHILE_EXP2
-push local 0
-push constant 0
-eq
-not
-not
-if-goto WHILE_END2
-call Keyboard.keyPressed 0
-pop local 0
-push pointer 0
-call SquareGame.moveWall 1
-pop temp 0
-push local 2
-not
-if-goto IF_TRUE6
-goto IF_FALSE6
-label IF_TRUE6
-push pointer 0
-call SquareGame.moveSquare 1
-pop temp 0
-push pointer 0
-push this 0
-push this 2
-call SquareGame.checkCollision 3
-push pointer 0
-push this 0
-push this 3
-call SquareGame.checkCollision 3
-or
-pop local 2
-label IF_FALSE6
-goto WHILE_EXP2
-label WHILE_END2
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
