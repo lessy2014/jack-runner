@@ -1,5 +1,6 @@
 class Square {
 
+   field RectangleCollider collider;
    field int x, y; // screen location of the top-left corner of this square
    field int size; // length of this square, in pixels
 
@@ -8,6 +9,7 @@ class Square {
       let x = ax;
       let y = ay;
       let size = asize;
+      let collider = RectangleCollider.new(x, y, size, size);
       do draw();
       return this;
    }
@@ -61,7 +63,7 @@ class Square {
          do Screen.setColor(false);
          do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
          let y = y - 2;
-         // Draws the top two rows of this square in its new location
+         do collider.setY(y);
          do Screen.setColor(true);
          do Screen.drawRectangle(x, y, x + size, y + 1);
       }
@@ -74,6 +76,7 @@ class Square {
          do Screen.setColor(false);
          do Screen.drawRectangle(x, y, x + size, y + 1);
          let y = y + 2;
+         do collider.setY(y);
          do Screen.setColor(true);
          do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
       }
@@ -86,6 +89,7 @@ class Square {
          do Screen.setColor(false);
          do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
          let x = x - 2;
+         do collider.setX(x);
          do Screen.setColor(true);
          do Screen.drawRectangle(x, y, x + 1, y + size);
       }
@@ -98,21 +102,14 @@ class Square {
          do Screen.setColor(false);
          do Screen.drawRectangle(x, y, x + 1, y + size);
          let x = x + 2;
+         do collider.setX(x);
          do Screen.setColor(true);
          do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
       }
       return;
    }
 
-   method int getXPos() {
-    return x;
-   }
-
-   method int getYPos() {
-    return y;
-   }
-
-   method int getSize() {
-    return size;
+   method RectangleCollider getCollider() {
+    return collider;
    }
 }

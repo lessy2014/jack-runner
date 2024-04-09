@@ -11,7 +11,7 @@ class SquareGame {
       let square = Square.new(0, 0, 30);
       do LCGRandom.setSeed(10);
       let randPos = LCGRandom.randRange(0, 224);
-      let wall = SimpleWall.new(250, randPos, 30);
+      let wall = SimpleWall.new(250, 50, 10, 30);
       let direction = 0;
       return this;
    }
@@ -41,29 +41,31 @@ class SquareGame {
         let randPos = LCGRandom.randRange(0, 224);
         do wall.erase();
         do wall.dispose();
-        let wall = SimpleWall.new(250, randPos, 30);
+        let wall = SimpleWall.new(250, randPos, 10, 30);
       }
-      do Sys.wait(5);  // delays the next movement
+      do Sys.wait(50);  // delays the next movement
       return;
    }
 
    /** Runs the game: handles the user's inputs and moves the square accordingly */
    method void run() {
       var char key;  // the key currently pressed by the user
-      var boolean exit;
+      var boolean exit, isCollided;
       let exit = false;
+      let isCollided = false;
       
       while (~exit) {
          // waits for a key to be pressed
          while (key = 0) {
             let key = Keyboard.keyPressed();
+            if (~(isCollided))
+            {
+               do moveSquare();
+               let isCollided = checkCollision(square, wall);
+            }
             do moveWall();
-            do moveSquare();
-            do checkCollision(square, wall);
          }
          if (key = 81)  { let exit = true; }     // q key
-         if (key = 90)  { do square.decSize(); } // z key
-         if (key = 88)  { do square.incSize(); } // x key
          if (key = 131) { let direction = 1; }   // up arrow
          if (key = 133) { let direction = 2; }   // down arrow
          if (key = 130) { let direction = 3; }   // left arrow
@@ -73,22 +75,21 @@ class SquareGame {
          while (~(key = 0)) {
             let key = Keyboard.keyPressed();
             do moveWall();
-            do moveSquare();
-            do checkCollision(square, wall);
+            if (~(isCollided))
+            {
+               do moveSquare();
+               let isCollided = checkCollision(square, wall);
+            }
          }
      } // while
      return;
    }
 
    method boolean checkCollision(Square player, SimpleWall someWall) {
-    if (((player.getXPos() + player.getSize()) > someWall.getXPos()) & (player.getXPos() < someWall.getXPos())) {
-        if (((player.getYPos() + player.getSize()) > someWall.getYPos()) & (player.getYPos() < someWall.getYPos())) {
-            do player.erase();
-            do dispose();
-            return true;
-        }
-    }
-    return false;
+    var RectangleCollider playerCollider, wallCollider;
+    let playerCollider = player.getCollider();
+    let wallCollider = someWall.getCollider();
+    return playerCollider.isCollided(wallCollider);
    }
 }
 

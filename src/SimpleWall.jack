@@ -1,47 +1,43 @@
 class SimpleWall {
 
-   field int x, y; // screen location of the top-left corner of this square
-   field int size; // length of this square, in pixels
+   field RectangleCollider collider;
+   field int x, y, sizeX, sizeY;
 
-   /** Constructs and draws a new square with a given location and size. */
-   constructor SimpleWall new(int ax, int ay, int asize) {
+   constructor SimpleWall new(int ax, int ay, int aSizeX, int aSizeY) {
       let x = ax;
       let y = ay;
-      let size = asize;
+      let sizeX = aSizeX;
+      let sizeY = aSizeY;
+      let collider = RectangleCollider.new(x, y, sizeX, sizeY);
       do draw();
       return this;
    }
 
-   /** Disposes this square. */
    method void dispose() {
       do Memory.deAlloc(this);
       return;
    }
 
-   /** Draws this square in its current (x,y) location */
    method void draw() {
-      // Draws the square using the color black
       do Screen.setColor(true);
-      do Screen.drawRectangle(x, y, x + size, y + size);
+      do Screen.drawRectangle(x, y, x + sizeX, y + sizeY);
       return;
    }
-
-   /** Erases this square. */
+ 
    method void erase() {
-      // Draws the square using the color white (background color)
       do Screen.setColor(false);
-      do Screen.drawRectangle(x, y, x + size, y + size);
+      do Screen.drawRectangle(x, y, x + sizeX, y + sizeY);
       return;
    }
 
-   /** Moves the square left by 2 pixels (if possible). */
    method boolean tryMove() {
       if (x > 1) {
          do Screen.setColor(false);
-         do Screen.drawRectangle((x + size) - 1, y, x + size, y + size);
+         do Screen.drawRectangle((x + sizeX) - 1, y, x + sizeX, y + sizeY);
          let x = x - 2;
+         do collider.setX(x);
          do Screen.setColor(true);
-         do Screen.drawRectangle(x, y, x + 1, y + size);
+         do Screen.drawRectangle(x, y, x + 1, y + sizeY);
          return true;
       }
       else {
@@ -49,15 +45,7 @@ class SimpleWall {
       }
    }
 
-   method int getXPos() {
-    return x;
-   }
-
-   method int getYPos() {
-    return y;
-   }
-
-   method int getSize() {
-    return size;
+   method RectangleCollider getCollider() {
+    return collider;
    }
 }
