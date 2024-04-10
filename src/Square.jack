@@ -104,8 +104,8 @@ class Square {
          do erase();
          let y = y - 2;
          do collider.setY(y);
-         do draw();
       }
+      do draw();
       return;
    }
 
@@ -115,8 +115,8 @@ class Square {
          do erase();
          let y = y + 2;
          do collider.setY(y);
-         do draw();
       }
+      do draw();
       return;
    }
 
@@ -126,8 +126,8 @@ class Square {
          do erase();
          let x = x - 2;
          do collider.setX(x);
-         do draw();
       }
+      do draw();
       return;
    }
 
@@ -137,14 +137,21 @@ class Square {
          do erase();
          let x = x + 2;
          do collider.setX(x);
-         do draw();
       }
+      do draw();
       return;
    }
 
    method void jump() {
       do erase();
       do Screen.setColor(true);
+      do Screen.drawRectangle(x, y, x + size, y + size);
+      return;
+   }
+
+   method void under() {
+      do erase();
+      do Screen.setColor(false);
       do Screen.drawRectangle(x, y, x + size, y + size);
       return;
    }

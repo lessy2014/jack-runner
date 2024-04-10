@@ -5,9 +5,11 @@ class SquareGame {
    field int iterationsToNewWall;
    field int wallType;
    field int inJumpForIterations;
+   field int inUnderForIterations;
     field SimpleWall upperWall, upperWall1, upperWall2;
     field SimpleWall lowerWall, lowerWall1, lowerWall2;
     field JumpWall jumpWall, jumpWall1, jumpWall2;
+    field UnderWall underWall, underWall1, underWall2;
     field int randPos;
 
    /** Constructs a new square game. */
@@ -18,6 +20,7 @@ class SquareGame {
       let direction = 0;
       let iterationsToNewWall = 100;
       let inJumpForIterations = 0;
+      let inUnderForIterations = 0;
       return this;
    }
 
@@ -35,6 +38,7 @@ class SquareGame {
       if (direction = 3) { do square.moveLeft(); }
       if (direction = 4) { do square.moveRight(); }
       if (inJumpForIterations > 10) { do square.jump(); }
+      if (inUnderForIterations > 10) { do square.under(); }
       return;
    }
 
@@ -70,6 +74,21 @@ class SquareGame {
          let wallMoved = jumpWall2.tryMove();
          if (~(wallMoved)) { do jumpWall2.dispose(); let jumpWall2 = null; }
       }
+      if (~(underWall = null))
+      {
+         let wallMoved = underWall.tryMove();
+         if (~(wallMoved)) { do underWall.dispose(); let underWall = null; }
+      }
+      if (~(underWall1 = null))
+      {
+         let wallMoved = underWall1.tryMove();
+         if (~(wallMoved)) { do underWall1.dispose(); let underWall1 = null; }
+      }
+      if (~(underWall2 = null))
+      {
+         let wallMoved = underWall2.tryMove();
+         if (~(wallMoved)) { do underWall2.dispose(); let underWall2 = null; }
+      }            
       do Sys.wait(25);  // по сути скорость игры. Чем меньше, тем игра быстрее
       return;
    }
@@ -95,14 +114,28 @@ class SquareGame {
       if (jumpWall2 = null) { let jumpWall2 = jmpWall; return; }
       return;
    }
+
+   method void createUnderWall()
+   {
+      var UnderWall undrWall;
+      let undrWall = UnderWall.new(500, 0, 16, 255);
+      if (underWall = null) { let underWall = undrWall; return; }
+      if (underWall1 = null) { let underWall1 = undrWall; return; }
+      if (underWall2 = null) { let underWall2 = undrWall; return; }
+      return;
+   }
+
    method void createNewWall()
    {
-      let wallType = LCGRandom.randRange(0, 1);
+      let wallType = LCGRandom.randRange(0, 2);
       if (wallType = 0) {
          do createLineOfWalls();
       }
       if (wallType = 1) {
          do createJumpWall();
+      }
+      if (wallType = 2) {
+         do createUnderWall();
       }
       return;
    }
@@ -123,6 +156,7 @@ class SquareGame {
          }
          let iterationsToNewWall = iterationsToNewWall + 1;
          if (inJumpForIterations > 0) { let inJumpForIterations = inJumpForIterations - 1; }
+         if (inUnderForIterations > 0) { let inUnderForIterations = inUnderForIterations - 1; }
          do moveWall();
          if (~(isCollided))
          {
@@ -140,15 +174,27 @@ class SquareGame {
                checkCollision(square, jumpWall1) |
                checkCollision(square, jumpWall2);
             }
+            if (inUnderForIterations < 10) {
+               let isCollided = isCollided | 
+               checkCollision(square, underWall) |
+               checkCollision(square, underWall1) |
+               checkCollision(square, underWall2);
+            }
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
          if (key = 133) { let direction = 2; }   // down arrow
          if (key = 130) { let direction = 3; }   // left arrow
          if (key = 132) { let direction = 4; }   // right arrow
-         if ((key = 32) & (inJumpForIterations = 0)) { let inJumpForIterations = 50; } // space to jump
+         if ((key = 32) & (isAbleToAction())) { let inJumpForIterations = 50; } // space to jump
+         if ((key = 90) & (isAbleToAction())) { let inUnderForIterations = 50; } // Z to under
      } 
      return;
+   }
+
+   method boolean isAbleToAction()
+   {
+      return ((inJumpForIterations = 0) & (inUnderForIterations = 0));
    }
 
    // Наследования не завезли, но можно арбузить вот так, если есть подходящие методы и поля

@@ -499,10 +499,10 @@ push this 0
 push this 2
 call RectangleCollider.setY 2
 pop temp 0
+label IF_FALSE0
 push pointer 0
 call Square.draw 1
 pop temp 0
-label IF_FALSE0
 push constant 0
 return
 function Square.moveDown 0
@@ -527,10 +527,10 @@ push this 0
 push this 2
 call RectangleCollider.setY 2
 pop temp 0
+label IF_FALSE0
 push pointer 0
 call Square.draw 1
 pop temp 0
-label IF_FALSE0
 push constant 0
 return
 function Square.moveLeft 0
@@ -553,10 +553,10 @@ push this 0
 push this 1
 call RectangleCollider.setX 2
 pop temp 0
+label IF_FALSE0
 push pointer 0
 call Square.draw 1
 pop temp 0
-label IF_FALSE0
 push constant 0
 return
 function Square.moveRight 0
@@ -581,10 +581,10 @@ push this 0
 push this 1
 call RectangleCollider.setX 2
 pop temp 0
+label IF_FALSE0
 push pointer 0
 call Square.draw 1
 pop temp 0
-label IF_FALSE0
 push constant 0
 return
 function Square.jump 0
@@ -595,6 +595,27 @@ call Square.erase 1
 pop temp 0
 push constant 0
 not
+call Screen.setColor 1
+pop temp 0
+push this 1
+push this 2
+push this 1
+push this 3
+add
+push this 2
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Square.under 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Square.erase 1
+pop temp 0
+push constant 0
 call Screen.setColor 1
 pop temp 0
 push this 1
