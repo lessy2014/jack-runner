@@ -1,9 +1,10 @@
 class JumpWall {
 
    field RectangleCollider collider;
-   field int x, y, sizeX, sizeY;
+   field int x, y, sizeX, sizeY, wallType;
 
    constructor JumpWall new(int ax, int ay, int aSizeX, int aSizeY) {
+      let wallType = 1;
       let x = ax;
       let y = ay;
       let sizeX = aSizeX;
@@ -85,5 +86,15 @@ class JumpWall {
 
    method RectangleCollider getCollider() {
     return collider;
+   }
+
+   method int getType()
+   {
+      return wallType;
+   }
+
+   method JumpWall getWall()
+   {
+      return this;
    }
 }

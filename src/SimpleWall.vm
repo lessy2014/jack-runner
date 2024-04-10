@@ -127,3 +127,19 @@ push argument 0
 pop pointer 0
 push this 0
 return
+function SimpleWall.getType 0
+push argument 0
+pop pointer 0
+push constant 1
+neg
+return
+function SimpleWall.getWall 0
+push argument 0
+pop pointer 0
+push pointer 0
+return
+function SimpleWall.getAdditionalWall 0
+push argument 0
+pop pointer 0
+push pointer 0
+return

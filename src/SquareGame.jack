@@ -5,18 +5,18 @@ class SquareGame {
    field int iterationsToNewWall;
    field int wallType;
    field int inJumpForIterations;
-    field SimpleWall upperWall;
-    field SimpleWall lowerWall;
-    field JumpWall jumpWall;
+   field SimpleWall wall1;
+   field SimpleWall wall2;
+   field SimpleWall wall3;
+   field JumpWall jumpWall;
+   field HoleWall holeWall;
     field int randPos;
 
-   /** Constructs a new square game. */
    constructor SquareGame new() {
-      // The initial square is located in (0,0), has size 30, and is not moving.
       let square = Square.new(0, 0, 30);
       do LCGRandom.setSeed(10);
       let direction = 0;
-      let iterationsToNewWall = 255;
+      let iterationsToNewWall = 150;
       let inJumpForIterations = 0;
       return this;
    }
@@ -40,18 +40,20 @@ class SquareGame {
 
     method void moveWall() {
       var boolean wallMoved;
-      if (wallType = 0)
+      if (~(wall1 = null))
       {
-         let wallMoved = upperWall.tryMove() & lowerWall.tryMove();
-         if (~(wallMoved)) {
-         do disposeOfWallLine();
-         }
+         let wallMoved = wall1.tryMove();
+         if (~(wallMoved)) { do wall1.dispose(); }
       }
-      if (wallType = 1) {
-         let wallMoved = jumpWall.tryMove();
-         if (~(wallMoved)) {
-            do disposeOfJumpWall();
-         }
+      if (~(wall2 = null))
+      {
+         let wallMoved = wall2.tryMove();
+         if (~(wallMoved)) { do wall2.dispose(); }
+      }
+      if (~(wall3 = null))
+      {
+         let wallMoved = wall3.tryMove();
+         if (~(wallMoved)) { do wall3.dispose(); }
       }
       do Sys.wait(25);  // по сути скорость игры. Чем меньше, тем игра быстрее
       return;
@@ -59,9 +61,25 @@ class SquareGame {
 
    method void createLineOfWalls()
    {
+      var HoleWall holeWall;
+      var SimpleWall lowerWall, upperWall;
       let randPos = LCGRandom.randRange(1, 184);
       let upperWall = SimpleWall.new(500, 0, 10, randPos);
       let lowerWall = SimpleWall.new(500, randPos + 70, 10, (185 - randPos));
+      let holeWall = HoleWall.new(upperWall, lowerWall);
+      if (wall1 = null) { let wall1 = holeWall; return; }
+      if (wall2 = null) { let wall2 = holeWall; return; }
+      if (wall3 = null) { let wall3 = holeWall; return; }
+      return;
+   }
+
+   method void createJumpWall() 
+   {
+      var JumpWall jumpWall;
+      let jumpWall = JumpWall.new(500, 0, 16, 255);
+      if (wall1 = null) { let wall1 = jumpWall; return; }
+      if (wall2 = null) { let wall2 = jumpWall; return; }
+      if (wall3 = null) { let wall3 = jumpWall; return; }
       return;
    }
 
@@ -72,37 +90,20 @@ class SquareGame {
          do createLineOfWalls();
       }
       if (wallType = 1) {
-         let jumpWall = JumpWall.new(500, 0, 16, 255);
+         do createJumpWall();
       }
       return;
    }
-
-   method void disposeOfWallLine()
-   {
-      do upperWall.erase();
-      do upperWall.dispose();
-      do lowerWall.erase();
-      do lowerWall.dispose();
-      return;
-   }
-
-   method void disposeOfJumpWall()
-   {
-      do jumpWall.erase();
-      do jumpWall.dispose();
-      return;
-   }
-
-   /** Runs the game: handles the user's inputs and moves the square accordingly */
+   
    method void run() {
-      var char key;  // the key currently pressed by the user
+      var char key;  
       var boolean exit, isCollided;
       let exit = false;
       let isCollided = false;
       
       while (~exit) {
          let key = Keyboard.keyPressed();
-         if (iterationsToNewWall = 255) 
+         if (iterationsToNewWall = 150) 
          {
             do createNewWall();
             let iterationsToNewWall = 0;
@@ -113,14 +114,10 @@ class SquareGame {
          if (~(isCollided))
          {
             do moveSquare();
-            
-            // let direction = 0;
-            if (wallType = 0) {
-               let isCollided = checkCollision(square, upperWall) | checkCollision(square, lowerWall);
-            }
-            if ((wallType = 1) & (inJumpForIterations < 10)) {
-               let isCollided = checkCollision(square, jumpWall);
-            }
+            let isCollided = (
+            checkCollision(square, wall1) | 
+            checkCollision(square, wall2) | 
+            checkCollision(square, wall3)); 
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
@@ -134,10 +131,27 @@ class SquareGame {
 
    // Наследования не завезли, но можно арбузить вот так, если есть подходящие методы и поля
    method boolean checkCollision(Square player, SimpleWall someWall) {
-    var RectangleCollider playerCollider, wallCollider;
+    var boolean isCollided;
+    var RectangleCollider playerCollider, wallCollider, additionalWallCollider;
+    var int wallType;
+    var SimpleWall wall, additionalWall;
+    if (someWall = null) { return false; }
     let playerCollider = player.getCollider();
-    let wallCollider = someWall.getCollider();
-    return playerCollider.isCollided(wallCollider);
+    let wallType = someWall.getType();
+    let wall = someWall.getWall();
+    let wallCollider = wall.getCollider();
+    let isCollided = playerCollider.isCollided(wallCollider);
+    if (wallType = 0)
+    {
+      let additionalWall = someWall.getAdditionalWall(); 
+      let additionalWallCollider = additionalWall.getCollider();
+      let isCollided = (isCollided | (playerCollider.isCollided(additionalWallCollider)));
+    }
+    if (wallType = 1)
+    {
+      let isCollided = (isCollided & (inJumpForIterations < 10));
+    }
+    return isCollided;
    }
 }
 

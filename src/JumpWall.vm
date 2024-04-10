@@ -1,7 +1,9 @@
 function JumpWall.new 0
-push constant 5
+push constant 6
 call Memory.alloc 1
 pop pointer 0
+push constant 1
+pop this 5
 push argument 0
 pop this 1
 push argument 1
@@ -342,4 +344,14 @@ function JumpWall.getCollider 0
 push argument 0
 pop pointer 0
 push this 0
+return
+function JumpWall.getType 0
+push argument 0
+pop pointer 0
+push this 5
+return
+function JumpWall.getWall 0
+push argument 0
+pop pointer 0
+push pointer 0
 return

@@ -48,4 +48,19 @@ class SimpleWall {
    method RectangleCollider getCollider() {
     return collider;
    }
+
+   method int getType()
+   {
+      return -1;
+   } 
+
+   method SimpleWall getWall()
+   {
+      return this;
+   } 
+
+   method SimpleWall getAdditionalWall()
+   {
+      return this;
+   }
 }

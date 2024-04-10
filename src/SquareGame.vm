@@ -12,7 +12,7 @@ call LCGRandom.setSeed 1
 pop temp 0
 push constant 0
 pop this 1
-push constant 255
+push constant 150
 pop this 2
 push constant 0
 pop this 4
@@ -87,53 +87,72 @@ return
 function SquareGame.moveWall 1
 push argument 0
 pop pointer 0
-push this 3
+push this 5
 push constant 0
 eq
+not
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push this 5
 call SimpleWall.tryMove 1
-push this 6
-call SimpleWall.tryMove 1
-and
 pop local 0
 push local 0
 not
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push pointer 0
-call SquareGame.disposeOfWallLine 1
+push this 5
+call SimpleWall.dispose 1
 pop temp 0
 label IF_FALSE1
 label IF_FALSE0
-push this 3
-push constant 1
+push this 6
+push constant 0
 eq
+not
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
-push this 7
-call JumpWall.tryMove 1
+push this 6
+call SimpleWall.tryMove 1
 pop local 0
 push local 0
 not
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
-push pointer 0
-call SquareGame.disposeOfJumpWall 1
+push this 6
+call SimpleWall.dispose 1
 pop temp 0
 label IF_FALSE3
 label IF_FALSE2
+push this 7
+push constant 0
+eq
+not
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 7
+call SimpleWall.tryMove 1
+pop local 0
+push local 0
+not
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 7
+call SimpleWall.dispose 1
+pop temp 0
+label IF_FALSE5
+label IF_FALSE4
 push constant 25
 call Sys.wait 1
 pop temp 0
 push constant 0
 return
-function SquareGame.createLineOfWalls 0
+function SquareGame.createLineOfWalls 3
 push argument 0
 pop pointer 0
 push constant 1
@@ -145,7 +164,7 @@ push constant 0
 push constant 10
 push this 8
 call SimpleWall.new 4
-pop this 5
+pop local 2
 push constant 500
 push this 8
 push constant 70
@@ -155,7 +174,88 @@ push constant 185
 push this 8
 sub
 call SimpleWall.new 4
+pop local 1
+push local 2
+push local 1
+call HoleWall.new 2
+pop local 0
+push this 5
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+pop this 5
+push constant 0
+return
+label IF_FALSE0
+push this 6
+push constant 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
 pop this 6
+push constant 0
+return
+label IF_FALSE1
+push this 7
+push constant 0
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 0
+pop this 7
+push constant 0
+return
+label IF_FALSE2
+push constant 0
+return
+function SquareGame.createJumpWall 1
+push argument 0
+pop pointer 0
+push constant 500
+push constant 0
+push constant 16
+push constant 255
+call JumpWall.new 4
+pop local 0
+push this 5
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+pop this 5
+push constant 0
+return
+label IF_FALSE0
+push this 6
+push constant 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
+pop this 6
+push constant 0
+return
+label IF_FALSE1
+push this 7
+push constant 0
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 0
+pop this 7
+push constant 0
+return
+label IF_FALSE2
 push constant 0
 return
 function SquareGame.createNewWall 0
@@ -181,41 +281,10 @@ eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push constant 500
-push constant 0
-push constant 16
-push constant 255
-call JumpWall.new 4
-pop this 7
+push pointer 0
+call SquareGame.createJumpWall 1
+pop temp 0
 label IF_FALSE1
-push constant 0
-return
-function SquareGame.disposeOfWallLine 0
-push argument 0
-pop pointer 0
-push this 5
-call SimpleWall.erase 1
-pop temp 0
-push this 5
-call SimpleWall.dispose 1
-pop temp 0
-push this 6
-call SimpleWall.erase 1
-pop temp 0
-push this 6
-call SimpleWall.dispose 1
-pop temp 0
-push constant 0
-return
-function SquareGame.disposeOfJumpWall 0
-push argument 0
-pop pointer 0
-push this 7
-call JumpWall.erase 1
-pop temp 0
-push this 7
-call JumpWall.dispose 1
-pop temp 0
 push constant 0
 return
 function SquareGame.run 3
@@ -233,7 +302,7 @@ if-goto WHILE_END0
 call Keyboard.keyPressed 0
 pop local 0
 push this 2
-push constant 255
+push constant 150
 eq
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -270,12 +339,6 @@ label IF_TRUE2
 push pointer 0
 call SquareGame.moveSquare 1
 pop temp 0
-push this 3
-push constant 0
-eq
-if-goto IF_TRUE3
-goto IF_FALSE3
-label IF_TRUE3
 push pointer 0
 push this 0
 push this 5
@@ -285,71 +348,59 @@ push this 0
 push this 6
 call SquareGame.checkCollision 3
 or
-pop local 2
-label IF_FALSE3
-push this 3
-push constant 1
-eq
-push this 4
-push constant 10
-lt
-and
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
 push pointer 0
 push this 0
 push this 7
 call SquareGame.checkCollision 3
+or
 pop local 2
-label IF_FALSE4
 label IF_FALSE2
 push local 0
 push constant 81
 eq
-if-goto IF_TRUE5
-goto IF_FALSE5
-label IF_TRUE5
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 0
 not
 pop local 1
-label IF_FALSE5
+label IF_FALSE3
 push local 0
 push constant 131
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 1
+pop this 1
+label IF_FALSE4
+push local 0
+push constant 133
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push constant 2
+pop this 1
+label IF_FALSE5
+push local 0
+push constant 130
 eq
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
-push constant 1
+push constant 3
 pop this 1
 label IF_FALSE6
 push local 0
-push constant 133
+push constant 132
 eq
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
-push constant 2
-pop this 1
-label IF_FALSE7
-push local 0
-push constant 130
-eq
-if-goto IF_TRUE8
-goto IF_FALSE8
-label IF_TRUE8
-push constant 3
-pop this 1
-label IF_FALSE8
-push local 0
-push constant 132
-eq
-if-goto IF_TRUE9
-goto IF_FALSE9
-label IF_TRUE9
 push constant 4
 pop this 1
-label IF_FALSE9
+label IF_FALSE7
 push local 0
 push constant 32
 eq
@@ -357,26 +408,75 @@ push this 4
 push constant 0
 eq
 and
-if-goto IF_TRUE10
-goto IF_FALSE10
-label IF_TRUE10
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
 push constant 50
 pop this 4
-label IF_FALSE10
+label IF_FALSE8
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function SquareGame.checkCollision 2
+function SquareGame.checkCollision 7
 push argument 0
 pop pointer 0
+push argument 2
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
 push argument 1
 call Square.getCollider 1
-pop local 0
-push argument 2
-call SimpleWall.getCollider 1
 pop local 1
+push argument 2
+call SimpleWall.getType 1
+pop local 4
+push argument 2
+call SimpleWall.getWall 1
+pop local 5
+push local 5
+call SimpleWall.getCollider 1
+pop local 2
+push local 1
+push local 2
+call RectangleCollider.isCollided 2
+pop local 0
+push local 4
+push constant 0
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 2
+call SimpleWall.getAdditionalWall 1
+pop local 6
+push local 6
+call SimpleWall.getCollider 1
+pop local 3
 push local 0
 push local 1
+push local 3
 call RectangleCollider.isCollided 2
+or
+pop local 0
+label IF_FALSE1
+push local 4
+push constant 1
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 0
+push this 4
+push constant 10
+lt
+and
+pop local 0
+label IF_FALSE2
+push local 0
 return

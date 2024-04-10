@@ -1,0 +1,51 @@
+class HoleWall {
+
+   field SimpleWall wall;
+   field SimpleWall additionalWall;
+   field int wallType;
+
+   constructor HoleWall new(SimpleWall upperWall, SimpleWall lowerWall) {
+      let wallType = 0;
+      let wall = upperWall;
+      let additionalWall = upperWall;
+      do draw();
+      return this;
+   }
+
+   method void dispose() {
+      do wall.erase();
+      do wall.dispose();
+      do additionalWall.erase();
+      do additionalWall.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   method void draw() {
+      do wall.draw();
+      do additionalWall.draw();
+      return;
+   }
+ 
+   method void erase() {
+      do wall.erase();
+      do additionalWall.erase();
+      return;
+   }
+
+   method boolean tryMove() {
+      return ((wall.tryMove()) & (additionalWall.tryMove()));
+   }
+
+   method int getType() {
+    return wallType;
+   }
+
+   method SimpleWall getWall() {
+    return wall;
+   }
+
+   method SimpleWall getAdditionalWall() {
+    return additionalWall;
+   }
+}
