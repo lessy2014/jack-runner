@@ -14,6 +14,7 @@ class JumpWall {
    }
 
    method void dispose() {
+      do erase();
       do Memory.deAlloc(this);
       return;
    }
