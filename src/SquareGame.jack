@@ -16,7 +16,6 @@ class SquareGame {
    constructor SquareGame new() {
       // The initial square is located in (0,0), has size 30, and is not moving.
       let square = Square.new(0, 0, 30);
-      do LCGRandom.setSeed(10);
       let direction = 0;
       let iterationsToNewWall = 100;
       let inJumpForIterations = 0;
@@ -185,6 +184,7 @@ class SquareGame {
             }
          } else {
             let exitCode = handleEnd();
+            do Sys.wait(100);
             return exitCode;
          }
    

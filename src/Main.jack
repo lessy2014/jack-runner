@@ -5,6 +5,7 @@ class Main {
 
         while (true) {
             do Score.resetToZero();
+            do LCGRandom.getSeedFromUser();
             let game = SquareGame.new();
             let statusCode = game.run();
             do game.dispose();

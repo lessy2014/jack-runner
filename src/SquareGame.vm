@@ -7,9 +7,6 @@ push constant 0
 push constant 30
 call Square.new 3
 pop this 0
-push constant 10
-call LCGRandom.setSeed 1
-pop temp 0
 push constant 0
 pop this 1
 push constant 100
@@ -667,6 +664,9 @@ label IF_FALSE3
 push pointer 0
 call SquareGame.handleEnd 1
 pop local 3
+push constant 100
+call Sys.wait 1
+pop temp 0
 push local 3
 return
 label IF_END3

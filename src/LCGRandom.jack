@@ -36,4 +36,24 @@ class LCGRandom {
        let scale = (M / (high - low + 1));
        return (LCGRandom.rand() / scale) + low;
     }
+
+    function void getSeedFromUser() {
+      var int newSeed;
+      var int addr;
+      do Output.moveCursor(10, 22);
+		do Output.printString("Wait seed from you");
+      do Output.moveCursor(12, 22);
+		do Output.printString("Press some button");
+      let newSeed = Keyboard.readChar();
+      do LCGRandom.setSeed(newSeed);
+      
+		let addr = 22;
+		
+		while (addr < 45) {
+			do Output.moveCursor(10, addr);
+         do Output.moveCursor(12, addr);
+			let addr = addr + 1;
+		}	
+      return;
+    }
 }
