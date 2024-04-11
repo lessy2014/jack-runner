@@ -1,4 +1,8 @@
 function Main.main 1
+call Score.resetToZero 0
+pop temp 0
+call Score.show 0
+pop temp 0
 call SquareGame.new 0
 pop local 0
 push local 0

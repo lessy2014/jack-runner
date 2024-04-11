@@ -333,13 +333,13 @@ push constant 1
 push constant 184
 call LCGRandom.randRange 2
 pop this 18
-push constant 500
+push constant 400
 push constant 0
 push constant 10
 push this 18
 call SimpleWall.new 4
 pop local 0
-push constant 500
+push constant 400
 push this 18
 push constant 70
 add
@@ -393,7 +393,7 @@ return
 function SquareGame.createJumpWall 1
 push argument 0
 pop pointer 0
-push constant 500
+push constant 400
 push constant 0
 push constant 16
 push constant 255
@@ -437,7 +437,7 @@ return
 function SquareGame.createUnderWall 1
 push argument 0
 pop pointer 0
-push constant 500
+push constant 400
 push constant 0
 push constant 16
 push constant 255
@@ -515,6 +515,8 @@ push pointer 0
 call SquareGame.createUnderWall 1
 pop temp 0
 label IF_FALSE2
+call Score.increase 0
+pop temp 0
 push constant 0
 return
 function SquareGame.run 3

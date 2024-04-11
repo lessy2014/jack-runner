@@ -97,8 +97,8 @@ class SquareGame {
    {
       var SimpleWall upWall, lowWall; 
       let randPos = LCGRandom.randRange(1, 184);
-      let upWall = SimpleWall.new(500, 0, 10, randPos);
-      let lowWall = SimpleWall.new(500, randPos + 70, 10, (185 - randPos));
+      let upWall = SimpleWall.new(400, 0, 10, randPos);
+      let lowWall = SimpleWall.new(400, randPos + 70, 10, (185 - randPos));
       if (upperWall = null) { let upperWall = upWall; let lowerWall = lowWall; return; }
       if (upperWall1 = null) { let upperWall1 = upWall; let lowerWall1 = lowWall; return; }
       if (upperWall2 = null) { let upperWall2 = upWall; let lowerWall2 = lowWall; return; }
@@ -108,7 +108,7 @@ class SquareGame {
    method void createJumpWall()
    {
       var JumpWall jmpWall;
-      let jmpWall = JumpWall.new(500, 0, 16, 255);
+      let jmpWall = JumpWall.new(400, 0, 16, 255);
       if (jumpWall = null) { let jumpWall = jmpWall; return; }
       if (jumpWall1 = null) { let jumpWall1 = jmpWall; return; }
       if (jumpWall2 = null) { let jumpWall2 = jmpWall; return; }
@@ -118,7 +118,7 @@ class SquareGame {
    method void createUnderWall()
    {
       var UnderWall undrWall;
-      let undrWall = UnderWall.new(500, 0, 16, 255);
+      let undrWall = UnderWall.new(400, 0, 16, 255);
       if (underWall = null) { let underWall = undrWall; return; }
       if (underWall1 = null) { let underWall1 = undrWall; return; }
       if (underWall2 = null) { let underWall2 = undrWall; return; }
@@ -137,6 +137,7 @@ class SquareGame {
       if (wallType = 2) {
          do createUnderWall();
       }
+      do Score.increase();
       return;
    }
 

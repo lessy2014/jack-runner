@@ -1,6 +1,8 @@
 class Main {
     function void main() {
         var SquareGame game;
+        do Score.resetToZero();
+        do Score.show();
         let game = SquareGame.new();
         do game.run();
         do game.dispose();

@@ -1,0 +1,44 @@
+class Score {
+    static int score;
+
+    function void resetToZero() {
+        let score = 0;
+        do Output.moveCursor(1, 53);
+		do Output.printString("Score: ");
+		do Output.moveCursor(1, 60);
+        do Output.printInt(score);
+        do Output.moveCursor(3, 53);
+		do Output.printString("Up: space");
+        do Output.moveCursor(5, 53);
+		do Output.printString("Down: z ");
+        return;
+    }
+
+    function void increase() {
+        let score = score + 1;
+        do Score.show();
+        return;
+    }
+
+    function int get() {
+        return score;
+    }
+
+    function void show() {
+		do Score.clearScore();
+        do Output.moveCursor(1, 60);
+		do Output.printInt(score);
+        return;
+    }
+
+    function void clearScore() {
+		var int addr;
+		let addr = 60;
+		
+		while (addr < 63) {
+			do Output.moveCursor(1, addr);
+			let addr = addr + 1;
+		}	
+		return;
+	}
+}
