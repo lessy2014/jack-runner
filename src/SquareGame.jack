@@ -142,11 +142,13 @@ class SquareGame {
    }
 
    /** Runs the game: handles the user's inputs and moves the square accordingly */
-   method void run() {
+   method int run() {
       var char key;  // the key currently pressed by the user
       var boolean exit, isCollided;
+      var int exitCode;
       let exit = false;
       let isCollided = false;
+      let exitCode = 0;
       
       while (~exit) {
          let key = Keyboard.keyPressed();
@@ -181,7 +183,11 @@ class SquareGame {
                checkCollision(square, underWall1) |
                checkCollision(square, underWall2);
             }
+         } else {
+            let exitCode = handleEnd();
+            return exitCode;
          }
+   
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
          if (key = 133) { let direction = 2; }   // down arrow
@@ -190,7 +196,53 @@ class SquareGame {
          if ((key = 32) & (isAbleToAction())) { let inJumpForIterations = 50; } // space to jump
          if ((key = 90) & (isAbleToAction())) { let inUnderForIterations = 50; } // Z to under
      } 
-     return;
+     return exitCode;
+   }
+
+   method int handleEnd() {
+      var char key;
+
+      if (~(upperWall = null)) { do upperWall.dispose(); do lowerWall.dispose(); }
+      if (~(upperWall1 = null)) { do upperWall1.dispose(); do lowerWall1.dispose(); }
+      if (~(upperWall2 = null)) { do upperWall2.dispose(); do lowerWall2.dispose(); }
+      if (~(jumpWall = null)) { do jumpWall.dispose(); }
+      if (~(jumpWall1 = null)) { do jumpWall1.dispose(); }
+      if (~(jumpWall2 = null)) { do jumpWall2.dispose(); }
+      if (~(underWall = null)) { do underWall.dispose(); }
+      if (~(underWall1 = null)) { do underWall1.dispose(); }
+      if (~(underWall2 = null)) { do underWall2.dispose();}
+      
+      do square.erase();
+      do showEndText();
+
+      while (true) {
+         let key = Keyboard.keyPressed();
+         
+         if (key = 81)  { do deleteEndText(); return 0; } // q key
+         if (key = 82)  { do deleteEndText(); return 1; }// r key
+      }
+
+      return 0;
+   }
+
+   method void showEndText() {
+      do Output.moveCursor(10, 22);
+		do Output.printString("Exit: q");
+      do Output.moveCursor(12, 22);
+		do Output.printString("Restart: r");
+      return;
+   }
+
+   method void deleteEndText() {
+      var int addr;
+		let addr = 22;
+		
+		while (addr < 33) {
+			do Output.moveCursor(10, addr);
+         do Output.moveCursor(12, addr);
+			let addr = addr + 1;
+		}	
+		return;
    }
 
    method boolean isAbleToAction()

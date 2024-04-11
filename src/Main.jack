@@ -1,11 +1,18 @@
 class Main {
     function void main() {
         var SquareGame game;
-        do Score.resetToZero();
-        do Score.show();
-        let game = SquareGame.new();
-        do game.run();
-        do game.dispose();
+        var int statusCode;
+
+        while (true) {
+            do Score.resetToZero();
+            let game = SquareGame.new();
+            let statusCode = game.run();
+            do game.dispose();
+            if (statusCode = 0) {
+                return;
+            }
+        }
+
         return;
     }
 }

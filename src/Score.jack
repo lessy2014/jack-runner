@@ -10,7 +10,8 @@ class Score {
         do Output.moveCursor(3, 53);
 		do Output.printString("Up: space");
         do Output.moveCursor(5, 53);
-		do Output.printString("Down: z ");
+		do Output.printString("Down: z");
+        
         return;
     }
 
