@@ -39,17 +39,37 @@ class LCGRandom {
 
     function void getSeedFromUser() {
       var int newSeed;
+      var int newPart;
       var int addr;
+      var int seedPartsCount;
+      var int i;
+      var int offset;
+      let offset = 10;
+      let i = 0;
+      let newSeed = 0;
+      let seedPartsCount = 3;
+
       do Output.moveCursor(10, 22);
 		do Output.printString("Wait seed from you");
       do Output.moveCursor(12, 22);
-		do Output.printString("Press some button");
-      let newSeed = Keyboard.readChar();
+		do Output.printString("Press some button ");
+
+		while (seedPartsCount > i) {
+         do Output.moveCursor(12, 40);
+         do Output.printInt(i);
+         let newPart = Keyboard.readChar();
+         let newSeed = newPart * offset + newSeed;
+         let offset = offset * 10;
+         let i = i + 1;
+
+         do Sys.wait(10);
+		}	
+		
       do LCGRandom.setSeed(newSeed);
       
 		let addr = 22;
 		
-		while (addr < 45) {
+		while (addr < 50) {
 			do Output.moveCursor(10, addr);
          do Output.moveCursor(12, addr);
 			let addr = addr + 1;

@@ -43,6 +43,7 @@ class SquareGame {
 
     method void moveWall() {
       var boolean wallMoved;
+      var int complexity;
       if (~(upperWall = null))
       {
          let wallMoved = ((upperWall.tryMove()) & (lowerWall.tryMove()));
@@ -87,9 +88,22 @@ class SquareGame {
       {
          let wallMoved = underWall2.tryMove();
          if (~(wallMoved)) { do underWall2.dispose(); let underWall2 = null; }
-      }            
-      do Sys.wait(25);  // по сути скорость игры. Чем меньше, тем игра быстрее
+      }
+      let complexity = adjustComplexity();            
+      do Sys.wait(complexity);  // по сути скорость игры. Чем меньше, тем игра быстрее
       return;
+   }
+
+   method int adjustComplexity()
+   {
+      var int score;
+      let score = Score.get();
+      if (score < 5) { return 25; }
+      if (score < 10) { return 20; }
+      if (score < 15) { return 15; }
+      if (score < 20) { return 10; }
+
+      return 5;
    }
 
    method void createLineOfWalls()

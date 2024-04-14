@@ -93,7 +93,7 @@ pop temp 0
 label IF_FALSE5
 push constant 0
 return
-function SquareGame.moveWall 1
+function SquareGame.moveWall 2
 push argument 0
 pop pointer 0
 push this 6
@@ -318,10 +318,56 @@ push constant 0
 pop this 17
 label IF_FALSE17
 label IF_FALSE16
-push constant 25
+push pointer 0
+call SquareGame.adjustComplexity 1
+pop local 1
+push local 1
 call Sys.wait 1
 pop temp 0
 push constant 0
+return
+function SquareGame.adjustComplexity 1
+push argument 0
+pop pointer 0
+call Score.get 0
+pop local 0
+push local 0
+push constant 5
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 25
+return
+label IF_FALSE0
+push local 0
+push constant 10
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 20
+return
+label IF_FALSE1
+push local 0
+push constant 15
+lt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 15
+return
+label IF_FALSE2
+push local 0
+push constant 20
+lt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push constant 10
+return
+label IF_FALSE3
+push constant 5
 return
 function SquareGame.createLineOfWalls 2
 push argument 0
