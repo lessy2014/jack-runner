@@ -73,8 +73,10 @@ class UnderWall {
    }
 
    method boolean tryMove() {
+      var int modulo;
       if (x > 1) {
-         do erase();
+         let modulo = Utils.mod(x, 16);
+         if (modulo = 0) { do erase(); }
          let x = x - 2;
          do collider.setX(x);
          do draw();
