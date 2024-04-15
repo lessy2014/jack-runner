@@ -37,6 +37,7 @@
   ```
 - Троллфейсом (Бобаном) 32х32 = смердженный 4х(16х16) (хотя можно было и получше))))
 - Арбузом SimpleWall для проверок коллизии с любой стеной одним методом
+  ```
    method boolean checkCollision(Square player, SimpleWall someWall) {
     var RectangleCollider playerCollider, wallCollider;
     if (someWall = null) { return false; }
@@ -44,3 +45,4 @@
     let wallCollider = someWall.getCollider();
     return playerCollider.isCollided(wallCollider);
    }
+  ```
