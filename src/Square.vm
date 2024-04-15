@@ -22,6 +22,9 @@ return
 function Square.dispose 0
 push argument 0
 pop pointer 0
+push this 0
+call RectangleCollider.dispose 1
+pop temp 0
 push pointer 0
 call Memory.deAlloc 1
 pop temp 0
@@ -565,7 +568,7 @@ pop pointer 0
 push this 1
 push this 3
 add
-push constant 460
+push constant 420
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0

@@ -935,12 +935,14 @@ label IF_TRUE10
 push pointer 0
 call SquareGame.deleteEndText 1
 pop temp 0
-push constant 1
+push constant 0
+not
 return
 label IF_FALSE10
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
+not
 return
 function SquareGame.showEndText 0
 push argument 0

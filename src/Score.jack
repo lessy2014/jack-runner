@@ -7,14 +7,6 @@ class Score {
 		do Output.printString("Score: ");
 		do Output.moveCursor(1, 60);
         do Output.printInt(score);
-        do Output.moveCursor(3, 53);
-		do Output.printString("Up: space");
-        do Output.moveCursor(5, 53);
-		do Output.printString("Down: z");
-        do Output.moveCursor(7, 53);
-		do Output.printString("Move:");
-         do Output.moveCursor(9, 53);
-        do Output.printString("arrows");
         return;
     }
 

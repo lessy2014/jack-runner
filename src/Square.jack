@@ -16,6 +16,7 @@ class Square {
 
    /** Disposes this square. */
    method void dispose() {
+      do collider.dispose();
       do Memory.deAlloc(this);
       return;
    }
@@ -133,7 +134,7 @@ class Square {
 
    /** Moves the square right by 2 pixels (if possible). */
    method void moveRight() {
-      if ((x + size) < 460) {
+      if ((x + size) < 420) {
          do erase();
          let x = x + 2;
          do collider.setX(x);

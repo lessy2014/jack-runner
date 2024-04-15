@@ -27,6 +27,9 @@ pop pointer 0
 push pointer 0
 call JumpWall.erase 1
 pop temp 0
+push this 0
+call RectangleCollider.dispose 1
+pop temp 0
 push pointer 0
 call Memory.deAlloc 1
 pop temp 0

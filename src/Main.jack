@@ -1,19 +1,72 @@
 class Main {
     function void main() {
         var SquareGame game;
-        var int statusCode;
+        var bottom isRestart;
 
+        do Main.showRules();
         while (true) {
             do Score.resetToZero();
-            do LCGRandom.getSeedFromUser();
+            do Main.setSeedFromUser();
             let game = SquareGame.new();
-            let statusCode = game.run();
+            let isRestart = game.run();
             do game.dispose();
-            if (statusCode = 0) {
+            if (~(isRestart)) {
                 return;
             }
         }
 
         return;
+    }
+
+    function void showRules() {
+        do Output.moveCursor(3, 53);
+		do Output.printString("Up: space");
+        do Output.moveCursor(5, 53);
+		do Output.printString("Down: z");
+        do Output.moveCursor(7, 53);
+		do Output.printString("Move:");
+        do Output.moveCursor(9, 53);
+        do Output.printString("arrows");
+        return;
+    }
+
+    function void setSeedFromUser() {
+      var int newSeed;
+      var int newPart;
+      var int addr;
+      var int seedPartsCount;
+      var int i;
+      var int offset;
+      let offset = 10;
+      let i = 0;
+      let newSeed = 0;
+      let seedPartsCount = 3;
+
+      do Output.moveCursor(10, 22);
+		do Output.printString("Wait seed from you");
+      do Output.moveCursor(12, 22);
+		do Output.printString("Press some button ");
+
+		while (seedPartsCount > i) {
+         do Output.moveCursor(12, 40);
+         do Output.printInt(i);
+         let newPart = Keyboard.readChar();
+         let newSeed = newPart * offset + newSeed;
+         let offset = offset * 10;
+         let i = i + 1;
+
+         do Sys.wait(10);
+		}
+        
+        do LCGRandom.setSeed(newSeed);
+      
+		let addr = 22;
+		
+		while (addr < 50) {
+			do Output.moveCursor(10, addr);
+         do Output.moveCursor(12, addr);
+			let addr = addr + 1;
+		}	
+      return;
     }
 }

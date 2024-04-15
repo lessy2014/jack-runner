@@ -59,10 +59,10 @@ gt
 push this 1
 push this 3
 add
-or
 push argument 1
 call RectangleCollider.getY 1
 lt
+or
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
@@ -79,10 +79,10 @@ gt
 push this 0
 push this 2
 add
-or
 push argument 1
 call RectangleCollider.getX 1
 lt
+or
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1

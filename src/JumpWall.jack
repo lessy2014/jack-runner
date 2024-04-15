@@ -15,6 +15,7 @@ class JumpWall {
 
    method void dispose() {
       do erase();
+      do collider.dispose();
       do Memory.deAlloc(this);
       return;
    }

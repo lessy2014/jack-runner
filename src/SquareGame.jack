@@ -155,13 +155,12 @@ class SquareGame {
    }
 
    /** Runs the game: handles the user's inputs and moves the square accordingly */
-   method int run() {
+   method boolean run() {
       var char key;  // the key currently pressed by the user
-      var boolean exit, isCollided;
-      var int exitCode;
+      var boolean exit, isCollided, isRestart;
       let exit = false;
       let isCollided = false;
-      let exitCode = 0;
+      let isRestart = false;
       
       while (~exit) {
          let key = Keyboard.keyPressed();
@@ -197,9 +196,9 @@ class SquareGame {
                checkCollision(square, underWall2);
             }
          } else {
-            let exitCode = handleEnd();
+            let isRestart = handleEnd();
             do Sys.wait(100);
-            return exitCode;
+            return isRestart;
          }
    
          if (key = 81)  { let exit = true; }     // q key
@@ -210,10 +209,10 @@ class SquareGame {
          if ((key = 32) & (isAbleToAction())) { let inJumpForIterations = 50; } // space to jump
          if ((key = 90) & (isAbleToAction())) { let inUnderForIterations = 50; } // Z to under
      } 
-     return exitCode;
+     return isRestart;
    }
 
-   method int handleEnd() {
+   method boolean handleEnd() {
       var char key;
 
       if (~(upperWall = null)) { do upperWall.dispose(); do lowerWall.dispose(); }
@@ -232,11 +231,11 @@ class SquareGame {
       while (true) {
          let key = Keyboard.keyPressed();
          
-         if (key = 81)  { do deleteEndText(); return 0; } // q key
-         if (key = 82)  { do deleteEndText(); return 1; }// r key
+         if (key = 81)  { do deleteEndText(); return false; } // q key
+         if (key = 82)  { do deleteEndText(); return true; }// r key
       }
 
-      return 0;
+      return true;
    }
 
    method void showEndText() {
