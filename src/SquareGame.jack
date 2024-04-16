@@ -1,16 +1,16 @@
 class SquareGame {
    field Square square; // the square of this game
    field int direction; // the square's current direction: 
-                        // 0=none, 1=up, 2=down, 3=left, 4=right
+                           // 0=none, 1=up, 2=down, 3=left, 4=right
    field int iterationsToNewWall;
    field int wallType;
    field int inJumpForIterations;
    field int inUnderForIterations;
-    field SimpleWall upperWall, upperWall1, upperWall2;
-    field SimpleWall lowerWall, lowerWall1, lowerWall2;
-    field JumpWall jumpWall, jumpWall1, jumpWall2;
-    field UnderWall underWall, underWall1, underWall2;
-    field int randPos;
+   field SimpleWall upperWall, upperWall1, upperWall2;
+   field SimpleWall lowerWall, lowerWall1, lowerWall2;
+   field JumpWall jumpWall, jumpWall1, jumpWall2;
+   field UnderWall underWall, underWall1, underWall2;
+   field int randPos;
 
    /** Constructs a new square game. */
    constructor SquareGame new() {
